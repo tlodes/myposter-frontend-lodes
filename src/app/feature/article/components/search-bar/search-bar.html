@@ -1,0 +1,59 @@
+<div class="bar" role="search">
+  <div class="bar__search">
+    <svg
+      class="bar__search-icon"
+      viewBox="0 0 24 24"
+      width="22"
+      height="22"
+      aria-hidden="true"
+    >
+      <circle
+        cx="10.5"
+        cy="10.5"
+        r="6.5"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.4"
+      />
+      <line
+        x1="15.5"
+        y1="15.5"
+        x2="21"
+        y2="21"
+        stroke="currentColor"
+        stroke-width="2.4"
+        stroke-linecap="round"
+      />
+    </svg>
+    <input
+      class="bar__input"
+      type="search"
+      placeholder="Filter by title, author…"
+      aria-label="Filter by title or author"
+      [value]="search()"
+      (input)="onSearchInput($any($event.target).value)"
+    />
+  </div>
+
+  <label class="bar__sort">
+    <span class="visually-hidden">Sort articles</span>
+    <select
+      class="bar__select"
+      [value]="sort()"
+      (change)="onSortChange($any($event.target).value)"
+    >
+      @for (choice of sortChoices; track choice.value) {
+        <option [value]="choice.value">{{ choice.label }}</option>
+      }
+    </select>
+  </label>
+
+  <label class="bar__checkbox">
+    <input
+      type="checkbox"
+      [checked]="latestOnly()"
+      (change)="onLatestOnlyChange($any($event.target).checked)"
+    />
+    <span>Latest only</span>
+  </label>
+</div>

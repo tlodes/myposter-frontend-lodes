@@ -1,0 +1,32 @@
+/**
+ * Global design tokens.
+ *
+ * Color scheme taken from `src/mockups/color-scheme.jpg`.
+ * Imported once in `src/styles.css` so the custom properties are available
+ * to every component (component styles are encapsulated, but CSS custom
+ * properties inherit through the DOM).
+ */
+
+:root {
+  /* Brand */
+  --color-primary: #00a4e0;
+  --color-primary-variant: #0d81b3;
+
+  /* Surfaces */
+  --color-background: #eeeeee;
+  --color-surface: #ffffff;
+
+  /* Text */
+  --color-text-default: #272727;
+  --color-text-accent: #888888;
+
+  /* Layout */
+  --content-max-width: 920px;
+  --content-min-width: 320px;
+  --content-padding-inline: 1.5rem;
+
+  /* Radii & elevation */
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.04);
+}

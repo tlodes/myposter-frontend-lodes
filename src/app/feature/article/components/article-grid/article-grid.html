@@ -1,0 +1,11 @@
+@if (articles().length > 0) {
+  <ul class="grid">
+    @for (article of articles(); track article.id) {
+      <li class="grid__item">
+        <app-article-card [article]="article" />
+      </li>
+    }
+  </ul>
+} @else {
+  <p class="grid__empty">No articles match your filters.</p>
+}

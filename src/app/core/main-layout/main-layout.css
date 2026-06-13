@@ -1,0 +1,15 @@
+:host {
+  display: block;
+  min-height: 100dvh;
+  background-color: var(--color-background);
+}
+
+.layout__content {
+  width: min(100%, var(--content-max-width));
+  margin-inline: auto;
+  padding-inline: var(--content-padding-inline);
+  /* Pull the content up so the search bar overlaps the blue header band. */
+  margin-top: -1.5rem; /* hier mit breakpoints arbeiten */
+  padding-bottom: 3rem;
+  box-sizing: border-box;
+}

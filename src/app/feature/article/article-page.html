@@ -1,0 +1,11 @@
+<app-search-bar
+  [(search)]="search"
+  [(sort)]="sort"
+  [(latestOnly)]="latestOnly"
+/>
+
+@if (loading()) {
+  <p class="page__status">Loading articles…</p>
+} @else {
+  <app-article-grid [articles]="visibleArticles()" />
+}
