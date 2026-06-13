@@ -8,11 +8,13 @@ export const routes: Routes = [
     component: MainLayout,
     children: [
       {
-        path: '',
-        title: 'dev articles',
-        loadComponent: () =>
-          import('./feature/article/article-page').then((m) => m.ArticlePage),
+        path: 'articles',
+        loadChildren: () =>
+          import('./feature/article/article.routes').then(
+            (m) => m.ARTICLE_ROUTES,
+          ),
       },
+      { path: '', redirectTo: 'articles', pathMatch: 'full' },
     ],
   },
 ];
