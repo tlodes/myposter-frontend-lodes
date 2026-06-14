@@ -69,7 +69,8 @@
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
-  margin-top: 0.75rem;
+  /* auto schiebt den Footer ans untere Card-Ende, unabhängig von der Titelhöhe */
+  margin-top: auto;
 }
 
 .card__like {
