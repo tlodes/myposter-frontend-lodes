@@ -26,7 +26,6 @@ export class ArticleCard {
       .join(''),
   );
 
-  /** Landscape title image, falling back to a portrait one if needed. */
   protected readonly imageUrl = computed(() => {
     const { landscape, portrait } = this.article().images;
     return landscape?.[0] ?? portrait?.[0] ?? '';

@@ -1,7 +1,7 @@
 import { ComponentRef } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { Article } from '../../service/article.model';
+import { Article } from '../../model/article.model';
 import { ArticleCard } from './article-card';
 
 const ARTICLE: Article = {
@@ -41,11 +41,58 @@ describe('ArticleCard', () => {
     expect(text('.card__avatar')).toBe('AN');
   });
 
+  it('uses a single initial for a one-word author', async () => {
+    componentRef.setInput('article', { ...ARTICLE, author: 'Madonna' });
+    await fixture.whenStable();
+
+    expect(text('.card__avatar')).toBe('M');
+  });
+
+  it('uses only the first two initials for long names', async () => {
+    componentRef.setInput('article', {
+      ...ARTICLE,
+      author: 'Jean Claude Van Damme',
+    });
+    await fixture.whenStable();
+
+    expect(text('.card__avatar')).toBe('JC');
+  });
+
+  it('ignores surrounding and repeated whitespace in the author name', async () => {
+    componentRef.setInput('article', { ...ARTICLE, author: '  Anna   Bell  ' });
+    await fixture.whenStable();
+
+    expect(text('.card__avatar')).toBe('AB');
+  });
+
+  function titleImageSrc(): string | null {
+    return (
+      fixture.nativeElement.querySelector('.card__image') as HTMLImageElement
+    ).getAttribute('src');
+  }
+
   it('prefers the landscape image as the title image', () => {
-    const img = fixture.nativeElement.querySelector(
-      '.card__image',
-    ) as HTMLImageElement;
-    expect(img.getAttribute('src')).toBe('https://example.com/l.jpg');
+    expect(titleImageSrc()).toBe('https://example.com/l.jpg');
+  });
+
+  it('falls back to the portrait image when no landscape image exists', async () => {
+    componentRef.setInput('article', {
+      ...ARTICLE,
+      images: { portrait: ['https://example.com/p.jpg'], landscape: [] },
+    });
+    await fixture.whenStable();
+
+    expect(titleImageSrc()).toBe('https://example.com/p.jpg');
+  });
+
+  it('uses an empty src when the article has no images', async () => {
+    componentRef.setInput('article', {
+      ...ARTICLE,
+      images: { portrait: [], landscape: [] },
+    });
+    await fixture.whenStable();
+
+    expect(titleImageSrc()).toBeFalsy();
   });
 
   it('shows the initial like count', () => {
