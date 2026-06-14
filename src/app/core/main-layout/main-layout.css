@@ -4,9 +4,9 @@
 }
 
 .layout__content {
-  width: min(100%, var(--content-max-width));
+  width: min(100%, var(--content-outer-width));
   margin-inline: auto;
   padding-inline: var(--content-padding-inline);
-  margin-top: -1.5rem; /* hier evtl. noch mit breakpoints arbeiten */
+  margin-top: -1.5rem;
   padding-bottom: 3rem;
 }

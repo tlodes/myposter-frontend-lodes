@@ -10,12 +10,6 @@ export const ARTICLE_ROUTES: Routes = [
         loadComponent: () =>
           import('./article-page').then((m) => m.ArticlePage),
       },
-      // Future: article detail page
-      // {
-      //   path: ':id',
-      //   loadComponent: () =>
-      //     import('./article-detail/article-detail').then((m) => m.ArticleDetail),
-      // },
     ],
   },
 ];

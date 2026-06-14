@@ -1,11 +1,5 @@
-/* You can add global styles to this file, and also import other style files */
-
 @import './app/global.css';
 
-/*
- * The brand font (AvenirNext) is proprietary, so we fall back to a neutral
- * system sans-serif stack as suggested in the specification.
- */
 * {
   box-sizing: border-box;
 }
@@ -25,4 +19,11 @@ body {
     Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+input,
+button,
+select,
+textarea {
+  font: inherit;
 }

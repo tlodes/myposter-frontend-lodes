@@ -1,12 +1,3 @@
-/**
- * Global design tokens.
- *
- * Color scheme taken from `src/mockups/color-scheme.jpg`.
- * Imported once in `src/styles.css` so the custom properties are available
- * to every component (component styles are encapsulated, but CSS custom
- * properties inherit through the DOM).
- */
-
 :root {
   /* Brand */
   --color-primary: #00a4e0;
@@ -24,6 +15,10 @@
   --content-max-width: 920px;
   --content-min-width: 320px;
   --content-padding-inline: 1.5rem;
+  /* Padding is added on top of the 920px */
+  --content-outer-width: calc(
+    var(--content-max-width) + 2 * var(--content-padding-inline)
+  );
 
   /* Radii & elevation */
   --radius-md: 6px;

@@ -1,5 +1,5 @@
 import { Component, model } from '@angular/core';
-import { SortOption } from '../../service/article.model';
+import { SortOption } from '../../model/article.model';
 import { FormsModule } from '@angular/forms';
 
 interface SortDropdownOptions {
