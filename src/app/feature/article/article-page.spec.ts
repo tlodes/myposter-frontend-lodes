@@ -132,3 +132,51 @@ describe('ArticlePage (load error)', () => {
     expect(page.visibleArticles()).toEqual([]);
   });
 });
+
+describe('ArticlePage (resilient to malformed data)', () => {
+  const MALFORMED: Article[] = [
+    makeArticle({ id: 1, author: 'Bob', title: 'Valid', dateAdded: '2022-01-01' }),
+    // Missing author + invalid date — must not crash filtering or sorting.
+    {
+      id: 2,
+      title: 'No author here',
+      dateAdded: 'not-a-date',
+      images: { portrait: [], landscape: [] },
+      likes: 0,
+    } as unknown as Article,
+    makeArticle({ id: 3, author: 'Ada', title: 'Another', dateAdded: '2024-01-01' }),
+  ];
+
+  class MalformedArticleService {
+    getArticles(): Observable<Article[]> {
+      return of(MALFORMED);
+    }
+  }
+
+  let fixture: ComponentFixture<ArticlePage>;
+  let page: any;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [ArticlePage],
+      providers: [
+        { provide: ArticleService, useClass: MalformedArticleService },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ArticlePage);
+    page = fixture.componentInstance;
+    await fixture.whenStable();
+  });
+
+  it('filters without crashing when author or title are missing', () => {
+    page.search.set('valid');
+    expect(page.visibleArticles().map((a: Article) => a.id)).toEqual([1]);
+  });
+
+  it('sorts by date without crashing when a date is invalid', () => {
+    // The invalid date falls back to timestamp 0, so it sorts as the oldest.
+    page.sort.set('date-asc');
+    expect(page.visibleArticles().map((a: Article) => a.id)).toEqual([2, 1, 3]);
+  });
+});

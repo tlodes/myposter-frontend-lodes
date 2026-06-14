@@ -56,8 +56,8 @@ export class ArticlePage {
     return articles.filter((article) => {
       const matchesQuery =
         query === '' ||
-        article.author.toLowerCase().includes(query) ||
-        article.title.toLowerCase().includes(query);
+        (article.author ?? '').toLowerCase().includes(query) ||
+        (article.title ?? '').toLowerCase().includes(query);
 
       const matchesYear =
         !onlyLatest ||
@@ -67,21 +67,26 @@ export class ArticlePage {
     });
   }
 
+  private toTime(dateAdded: string): number {
+    const time = new Date(dateAdded).getTime();
+    return Number.isNaN(time) ? 0 : time;
+  }
+
   private sortArticles(articles: Article[], sort: SortOption): Article[] {
     const sorted = [...articles];
 
     switch (sort) {
       case 'author':
-        return sorted.sort((a, b) => a.author.localeCompare(b.author));
+        return sorted.sort((a, b) =>
+          (a.author ?? '').localeCompare(b.author ?? ''),
+        );
       case 'date-desc':
         return sorted.sort(
-          (a, b) =>
-            new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime(),
+          (a, b) => this.toTime(b.dateAdded) - this.toTime(a.dateAdded),
         );
       case 'date-asc':
         return sorted.sort(
-          (a, b) =>
-            new Date(a.dateAdded).getTime() - new Date(b.dateAdded).getTime(),
+          (a, b) => this.toTime(a.dateAdded) - this.toTime(b.dateAdded),
         );
       default:
         return sorted;

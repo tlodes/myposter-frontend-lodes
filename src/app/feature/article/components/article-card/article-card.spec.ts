@@ -125,4 +125,36 @@ describe('ArticleCard', () => {
     expect(text('.card__likes-count')).toBe('230');
     expect(button.getAttribute('aria-pressed')).toBe('false');
   });
+
+  describe('resilience to malformed article data', () => {
+    it('renders an empty title image src when the images object is missing', async () => {
+      componentRef.setInput('article', {
+        ...ARTICLE,
+        images: undefined,
+      } as unknown as Article);
+      await fixture.whenStable();
+
+      expect(titleImageSrc()).toBeFalsy();
+    });
+
+    it('shows no initials when the author is missing', async () => {
+      componentRef.setInput('article', {
+        ...ARTICLE,
+        author: undefined,
+      } as unknown as Article);
+      await fixture.whenStable();
+
+      expect(text('.card__avatar')).toBe('');
+    });
+
+    it('treats a missing like count as zero', async () => {
+      componentRef.setInput('article', {
+        ...ARTICLE,
+        likes: undefined,
+      } as unknown as Article);
+      await fixture.whenStable();
+
+      expect(text('.card__likes-count')).toBe('0');
+    });
+  });
 });

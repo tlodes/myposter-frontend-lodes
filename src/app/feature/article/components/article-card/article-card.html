@@ -12,7 +12,7 @@
       <span class="card__author-meta">
         <span class="card__author-name">{{ article().author }}</span>
         <time class="card__date" [attr.datetime]="article().dateAdded">
-          {{ article().dateAdded | date: 'd MMM' }}
+          {{ publishedDate() | date: 'd MMM' }}
         </time>
       </span>
     </header>
