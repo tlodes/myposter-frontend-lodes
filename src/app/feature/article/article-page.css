@@ -9,3 +9,7 @@
   text-align: center;
   color: var(--color-text-accent);
 }
+
+.page__status--error {
+  color: var(--color-danger, #c0392b);
+}

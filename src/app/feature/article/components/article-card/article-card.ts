@@ -1,16 +1,8 @@
 import { DatePipe } from '@angular/common';
 import { Component, computed, input, signal } from '@angular/core';
 
-import { Article } from '../../service/article.model';
+import { Article } from '../../model/article.model';
 
-/**
- * A single article card: title image, author info, post title and a
- * like button whose styling and counter react to the liked state
- * (see `mockups/4_active-states.jpg`).
- *
- * The like state is local UI state for now — there is no write endpoint
- * in the API — so it lives in a signal on the component.
- */
 @Component({
   selector: 'app-article-card',
   imports: [DatePipe],
@@ -19,16 +11,12 @@ import { Article } from '../../service/article.model';
 })
 export class ArticleCard {
   readonly article = input.required<Article>();
-
-  /** Whether the current user has liked this article. */
   protected readonly liked = signal(false);
 
-  /** Like count including the user's own (un)like. */
   protected readonly likeCount = computed(
     () => this.article().likes + (this.liked() ? 1 : 0),
   );
 
-  /** Initials shown in the author avatar, e.g. "Author Name" -> "AN". */
   protected readonly initials = computed(() =>
     this.article()
       .author.split(/\s+/)

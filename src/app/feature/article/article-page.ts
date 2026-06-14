@@ -4,16 +4,9 @@ import { catchError, of } from 'rxjs';
 
 import { ArticleGrid } from './components/article-grid/article-grid';
 import { SearchBar } from './components/search-bar/search-bar';
-import { Article, SortOption } from './service/article.model';
+import { Article, SortOption } from './model/article.model';
 import { ArticleService } from './service/article.service';
 
-/**
- * Top-level page for the article feature.
- *
- * Owns the view state (search query, sort order, "latest only") and derives
- * the visible list of articles from the data loaded by {@link ArticleService}.
- * The child components stay presentational.
- */
 @Component({
   selector: 'app-article-page',
   imports: [SearchBar, ArticleGrid],
@@ -23,24 +16,44 @@ import { ArticleService } from './service/article.service';
 export class ArticlePage {
   private readonly articleService = inject(ArticleService);
 
-  /** Raw articles from the API (undefined while loading). */
-  private readonly articles = toSignal(
-    this.articleService.getArticles().pipe(catchError(() => of([] as Article[]))),
-  );
-
+  protected readonly loadError = signal(false);
   protected readonly search = signal('');
   protected readonly sort = signal<SortOption>('default');
   protected readonly latestOnly = signal(false);
 
-  protected readonly loading = computed(() => this.articles() === undefined);
+  private readonly articles = toSignal(
+    this.articleService.getArticles().pipe(
+      catchError((error: unknown) => {
+        console.log(error)
+        this.loadError.set(true);
+        return of([] as Article[]);
+      }),
+    ),
+  );
 
-  /** Articles after search + year filter + sorting are applied. */
+  protected readonly loading = computed(
+    () => !this.loadError() && this.articles() === undefined,
+  );
+
   protected readonly visibleArticles = computed<Article[]>(() => {
     const query = this.search().trim().toLowerCase();
-    const onlyLatest = this.latestOnly();
+    const filtered = this.filterArticles(
+      this.articles() ?? [],
+      query,
+      this.latestOnly(),
+    );
+
+    return this.sortArticles(filtered, this.sort());
+  });
+
+  private filterArticles(
+    articles: Article[],
+    query: string,
+    onlyLatest: boolean,
+  ): Article[] {
     const currentYear = new Date().getFullYear();
 
-    const filtered = (this.articles() ?? []).filter((article) => {
+    return articles.filter((article) => {
       const matchesQuery =
         query === '' ||
         article.author.toLowerCase().includes(query) ||
@@ -52,9 +65,7 @@ export class ArticlePage {
 
       return matchesQuery && matchesYear;
     });
-
-    return this.sortArticles(filtered, this.sort());
-  });
+  }
 
   private sortArticles(articles: Article[], sort: SortOption): Article[] {
     const sorted = [...articles];

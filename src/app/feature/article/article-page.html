@@ -6,6 +6,10 @@
 
 @if (loading()) {
   <p class="page__status">Loading articles…</p>
+} @else if (loadError()) {
+  <p class="page__status page__status--error">
+    Articles could not be loaded. Please try again later.
+  </p>
 } @else {
   <app-article-grid [articles]="visibleArticles()" />
 }

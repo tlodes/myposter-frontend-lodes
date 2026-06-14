@@ -8,13 +8,6 @@
   padding: 0;
   display: grid;
   gap: 1.25rem;
-  /*
-   * auto-fill + minmax lets the cards grow to fill the row and reflow the
-   * column count per breakpoint:
-   *   ~920px content -> 3 columns
-   *   ~620px         -> 2 columns
-   *   320px          -> 1 column
-   */
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 270px), 1fr));
 }
 
