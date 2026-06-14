@@ -1,7 +1,3 @@
-:host {
-  display: block;
-}
-
 .bar {
   display: flex;
   align-items: center;
@@ -9,7 +5,8 @@
   background-color: var(--color-surface);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-card);
-  padding: 0.75rem 1.25rem;
+  padding: 1rem 1.25rem;
+  font-size: 0.9375rem;
 }
 
 .bar__search {
@@ -21,17 +18,15 @@
 }
 
 .bar__search-icon {
-  color: var(--color-primary);
   flex-shrink: 0;
+  width: 29px;
+  height: 29px;
 }
 
 .bar__input {
-  font: inherit;
-  font-size: 1rem;
   border: none;
   outline: none;
   width: 100%;
-  background: transparent;
   color: var(--color-text-default);
 }
 
@@ -44,9 +39,7 @@
 }
 
 .bar__select {
-  font: inherit;
-  font-size: 0.9375rem;
-  color: var(--color-text-default);
+  color: var(--color-text-accent);
   border: none;
   background: transparent;
   cursor: pointer;
@@ -58,7 +51,6 @@
   align-items: center;
   gap: 0.5rem;
   flex-shrink: 0;
-  font-size: 0.9375rem;
   color: var(--color-text-accent);
   cursor: pointer;
   user-select: none;
@@ -67,7 +59,9 @@
 .bar__checkbox input {
   width: 16px;
   height: 16px;
-  accent-color: var(--color-primary);
+  margin: 0;
+  background-color: var(--color-background);
+  border-radius: 3px;
   cursor: pointer;
 }
 
@@ -83,15 +77,11 @@
   border: 0;
 }
 
-/*
- * On narrow screens the bar stacks vertically (see mockups/3_mobile.jpg):
- * search on top, then sort, then the checkbox.
- */
 @media (max-width: 560px) {
   .bar {
     flex-direction: column;
     align-items: stretch;
-    gap: 0.75rem;
+    gap: 1.25rem;
   }
 
   .bar__search {

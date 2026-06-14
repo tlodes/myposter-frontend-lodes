@@ -1,48 +1,27 @@
 <div class="bar" role="search">
   <div class="bar__search">
-    <svg
+    <img
       class="bar__search-icon"
-      viewBox="0 0 24 24"
-      width="22"
-      height="22"
-      aria-hidden="true"
-    >
-      <circle
-        cx="10.5"
-        cy="10.5"
-        r="6.5"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2.4"
-      />
-      <line
-        x1="15.5"
-        y1="15.5"
-        x2="21"
-        y2="21"
-        stroke="currentColor"
-        stroke-width="2.4"
-        stroke-linecap="round"
-      />
-    </svg>
+      src="/assets/search-icon.svg"
+      alt=""
+    />
     <input
       class="bar__input"
       type="search"
       placeholder="Filter by title, author…"
       aria-label="Filter by title or author"
-      [value]="search()"
-      (input)="onSearchInput($any($event.target).value)"
+      [(ngModel)]="search"
     />
   </div>
 
   <label class="bar__sort">
+    <!-- only for screenreader -->
     <span class="visually-hidden">Sort articles</span>
     <select
       class="bar__select"
-      [value]="sort()"
-      (change)="onSortChange($any($event.target).value)"
+      [(ngModel)]="sort"
     >
-      @for (choice of sortChoices; track choice.value) {
+      @for (choice of sortDropdownOptions; track choice.value) {
         <option [value]="choice.value">{{ choice.label }}</option>
       }
     </select>
@@ -51,8 +30,7 @@
   <label class="bar__checkbox">
     <input
       type="checkbox"
-      [checked]="latestOnly()"
-      (change)="onLatestOnlyChange($any($event.target).checked)"
+      [(ngModel)]="latestOnly"
     />
     <span>Latest only</span>
   </label>
