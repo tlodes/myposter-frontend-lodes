@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { Observable, map, retry } from 'rxjs';
+import { Observable, map } from 'rxjs';
 
 import { Article, ArticleResponse } from '../model/article.model';
 
@@ -14,7 +14,6 @@ export class ArticleService {
   getArticles(): Observable<Article[]> {
     return this.http.get<ArticleResponse>(this.endpoint).pipe(
       map((response) => response.payload?.data ?? []),
-      retry({ count: 2, delay: 1000 }),
     );
   }
 }

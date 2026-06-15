@@ -23,8 +23,7 @@ export class ArticlePage {
 
   private readonly articles = toSignal(
     this.articleService.getArticles().pipe(
-      catchError((error: unknown) => {
-        console.log(error)
+      catchError(() => {
         this.loadError.set(true);
         return of([] as Article[]);
       }),
@@ -56,8 +55,8 @@ export class ArticlePage {
     return articles.filter((article) => {
       const matchesQuery =
         query === '' ||
-        (article.author ?? '').toLowerCase().includes(query) ||
-        (article.title ?? '').toLowerCase().includes(query);
+        article.author.toLowerCase().includes(query) ||
+        article.title.toLowerCase().includes(query);
 
       const matchesYear =
         !onlyLatest ||
@@ -77,9 +76,7 @@ export class ArticlePage {
 
     switch (sort) {
       case 'author':
-        return sorted.sort((a, b) =>
-          (a.author ?? '').localeCompare(b.author ?? ''),
-        );
+        return sorted.sort((a, b) => a.author.localeCompare(b.author));
       case 'date-desc':
         return sorted.sort(
           (a, b) => this.toTime(b.dateAdded) - this.toTime(a.dateAdded),

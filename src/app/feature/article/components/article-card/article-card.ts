@@ -14,24 +14,23 @@ export class ArticleCard {
   protected readonly liked = signal(false);
 
   protected readonly likeCount = computed(
-    () => (this.article().likes ?? 0) + (this.liked() ? 1 : 0),
+    () => this.article().likes + (this.liked() ? 1 : 0),
   );
 
   protected readonly initials = computed(() =>
-    (this.article().author ?? '')
-      .split(/\s+/)
+    this.article()
+      .author.split(/\s+/)
       .filter(Boolean)
       .slice(0, 2)
-      .map((part) => part[0]?.toUpperCase() ?? '')
+      .map((part) => part[0].toUpperCase())
       .join(''),
   );
 
   protected readonly imageUrl = computed(() => {
     const images = this.article().images;
-    return images?.landscape?.[0] ?? images?.portrait?.[0] ?? '';
+    return images.landscape[0] ?? images.portrait[0] ?? '';
   });
 
-  /** Parsed publish date, or null when the value is missing/invalid (DatePipe throws otherwise). */
   protected readonly publishedDate = computed(() => {
     const date = new Date(this.article().dateAdded);
     return Number.isNaN(date.getTime()) ? null : date;

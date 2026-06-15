@@ -4,12 +4,8 @@ import {
   HttpTestingController,
   provideHttpClientTesting,
 } from '@angular/common/http/testing';
-import { vi } from 'vitest';
-
-import { Article, ArticleResponse } from '../model/article.model';
+import { ArticleResponse } from '../model/article.model';
 import { ArticleService } from './article.service';
-
-const RETRY_DELAY_MS = 1000;
 
 const ENDPOINT = 'https://www.myposter.de/web-api/job-interview';
 
@@ -67,49 +63,15 @@ describe('ArticleService', () => {
     expect(result).toEqual([]);
   });
 
-  it('retries transient failures before succeeding', async () => {
-    vi.useFakeTimers();
-    try {
-      let result: Article[] | undefined;
-      service.getArticles().subscribe((articles) => (result = articles));
+  it('propagates the error to the caller', () => {
+    let errored = false;
+    service.getArticles().subscribe({
+      next: () => undefined,
+      error: () => (errored = true),
+    });
 
-      // Initial attempt + first retry both fail.
-      httpMock.expectOne(ENDPOINT).error(new ProgressEvent('error'));
-      await vi.advanceTimersByTimeAsync(RETRY_DELAY_MS);
-      httpMock.expectOne(ENDPOINT).error(new ProgressEvent('error'));
-      await vi.advanceTimersByTimeAsync(RETRY_DELAY_MS);
+    httpMock.expectOne(ENDPOINT).error(new ProgressEvent('error'));
 
-      // Second (last allowed) retry succeeds.
-      httpMock.expectOne(ENDPOINT).flush({
-        message: { status: 'success', code: 'ok', text: 'ok' },
-        payload: { data: [] },
-      });
-
-      expect(result).toEqual([]);
-    } finally {
-      vi.useRealTimers();
-    }
-  });
-
-  it('propagates the error after exhausting the retries', async () => {
-    vi.useFakeTimers();
-    try {
-      let errored = false;
-      service.getArticles().subscribe({
-        next: () => undefined,
-        error: () => (errored = true),
-      });
-
-      // 1 initial attempt + 2 retries = 3 failures, then it gives up.
-      httpMock.expectOne(ENDPOINT).error(new ProgressEvent('error'));
-      await vi.advanceTimersByTimeAsync(RETRY_DELAY_MS);
-      httpMock.expectOne(ENDPOINT).error(new ProgressEvent('error'));
-      await vi.advanceTimersByTimeAsync(RETRY_DELAY_MS);
-      httpMock.expectOne(ENDPOINT).error(new ProgressEvent('error'));
-
-      expect(errored).toBe(true);
-    } finally {
-      vi.useRealTimers();
-    }
+    expect(errored).toBe(true);
   });
 });
