@@ -8,6 +8,9 @@
   padding: 0;
   display: grid;
   gap: 1.25rem;
+  /* Responsive ohne Media Queries: so viele Spalten wie bei min. 270px passen,
+     Rest-Platz gleichmäßig auffüllen (1fr); auf sehr schmalen Screens fällt
+     min(100%, 270px) auf volle Breite zurück -> kein horizontaler Overflow. */
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 270px), 1fr));
 }
 
